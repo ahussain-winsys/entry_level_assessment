@@ -5,7 +5,7 @@
 
 #define INPUT_COUNT 4
 #define OUTPUT_COUNT 4
-#define CHIP_NAME "gpiochip0" // Adjust this to match your GPIO chip
+#define CHIP_NAME "gpiochip0"
 
 int main() {
     struct gpiod_chip *chip;
