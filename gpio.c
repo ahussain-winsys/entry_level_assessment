@@ -14,7 +14,7 @@ int main() {
     int gpio_inputs[INPUT_COUNT] = {4, 5, 6, 7};  // GPIO lines for inputs
     int gpio_outputs[OUTPUT_COUNT] = {0, 1, 2, 3}; // GPIO lines for outputs
     int i, j, value;
-    int status = 1; // Assume pass
+    int status = 0;
 
     // Open the GPIO chip
     chip = gpiod_chip_open_by_name(CHIP_NAME);
@@ -42,58 +42,18 @@ int main() {
             return 1;
         }
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Main loop
-    for (i = 0; i < (1 << OUTPUT_COUNT); i++) {
-        int val[OUTPUT_COUNT];
-        for (j = 0; j < OUTPUT_COUNT; j++) {
-            val[j] = (i >> j) & 1; // Get the j-th bit
-        }
 
-        printf("OUT\t");
-        for (j = 0; j < OUTPUT_COUNT; j++) {
-            printf("%d ", val[j]);
-            if (gpiod_line_set_value(output_lines[j], val[j]) < 0) {
-                perror("Failed to set output line");
-                status = 0;
-                break;
-            }
-        }
-        printf("\n");
 
-        if (!status) break;
 
-        sleep(1); // Brief delay to ensure values are set
 
-        printf("IN\t");
-        for (j = 0; j < INPUT_COUNT; j++) {
-            value = gpiod_line_get_value(input_lines[j]);
-            if (value < 0) {
-                perror("Failed to read input line");
-                status = 0;
-                break;
-            }
-            printf("%d ", value);
-        }
-        printf("\n");
 
-        if (!status) break;
 
-        // Check if input values match output values
-        int match = 1;
-        for (j = 0; j < OUTPUT_COUNT; j++) {
-            if (val[j] != (gpiod_line_get_value(input_lines[j]) == 1)) {
-                match = 0;
-                break;
-            }
-        }
 
-        if (!match) {
-            status = 0;
-            break;
-        }
-    }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Report the final status
     if (status) {
         printf("PASS\n");
